@@ -15,6 +15,8 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
+void signUpUser() {}
+
 class _SignupScreenState extends State<SignupScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -60,11 +62,11 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(
                   height: 24,
                 ),
-                ContainerBox(
-                  // onTap: signInUser,
-                  onTap: () {
-                    // Navigator.of(context).pushNamed('/login');
-                  },
+                const ContainerBox(
+                  onTap: signUpUser,
+                  // onTap: () {
+                  // Navigator.of(context).pushNamed('/login');
+                  // },
                   hintText: 'Sign Up',
                 ),
                 const Spacer(),

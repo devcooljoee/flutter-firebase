@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfirebase/views/components/app_text.dart';
 // import 'package:flutter/rendering.dart';
@@ -8,14 +9,86 @@ import 'package:flutterfirebase/views/components/image_container.dart';
 import 'package:flutterfirebase/views/components/password_textfield.dart';
 import 'package:flutterfirebase/views/components/username_textfield.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-  final usernameController = TextEditingController();
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   //signInUSER
-  void signInUser() {}
+  void signInUser() async {
+    //loading circle
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.black,
+            ),
+          );
+        });
+
+    //sign In
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      //pop loading circle
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      if (e.code == "user-not-found") {
+        wrongEmail();
+      }
+      if (e.code == "wrong-password") {
+        wrongPassword();
+      }
+    }
+  }
+
+  void wrongEmail() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Wrong Email",
+            ),
+            content: Text("No user found for that email."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("OK"),
+              ),
+            ],
+          );
+        });
+  }
+
+  void wrongPassword() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Wrong Password",
+            ),
+            content: Text("Incorrect password provided."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("OK"),
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                 Spacer(),
                 UsernameTextField(
                   label: ("Email address"),
-                  controller: usernameController,
+                  controller: emailController,
                   hinttext: "peter@gmail.com",
                   obscuretext: false,
                 ),
@@ -59,10 +132,7 @@ class LoginScreen extends StatelessWidget {
                   height: 24,
                 ),
                 ContainerBox(
-                  // onTap: signInUser,
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/chatscreen');
-                  },
+                  onTap: signInUser,
                   hintText: 'Sign In',
                 ),
                 Spacer(),
