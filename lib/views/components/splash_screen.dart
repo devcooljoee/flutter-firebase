@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterfirebase/pages/signup_screen.dart';
+import 'package:flutterfirebase/pages/auth_page.dart';
+
 import 'package:flutterfirebase/views/components/image_container.dart';
 
 class SplashScreenState extends StatefulWidget {
@@ -15,7 +16,7 @@ class _SplashScreenStateState extends State<SplashScreenState> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (contextx) => SignupScreen()),
+          MaterialPageRoute(builder: (contextx) => const AuthPage()),
           (route) => false);
     });
     super.initState();

@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfirebase/firebase_options.dart';
-import 'package:flutterfirebase/pages/auth_page.dart';
+
 import 'package:flutterfirebase/pages/chat_screen.dart';
 import 'package:flutterfirebase/pages/forgot.dart';
 import 'package:flutterfirebase/pages/login_page.dart';
 import 'package:flutterfirebase/pages/signup_screen.dart';
+import 'package:flutterfirebase/views/components/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +29,10 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           useMaterial3: true,
         ),
-        home: const AuthPage(),
+        home: const SplashScreenState(),
         routes: {
           '/login': (context) => LoginScreen(),
-          '/register': (context) => SignupScreen(),
+          '/register': (context) => const SignUpScreen(),
           '/forgot': (context) => ForgotPassowrd(),
           '/chatscreen': (context) => const ChatScreen(),
         });

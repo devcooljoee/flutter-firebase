@@ -35,7 +35,7 @@ class ForgotPassowrd extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: TextButton(
-                    child: Text("Go back", style: AppText.subText),
+                    child: Text("<<< Go back", style: AppText.subText),
                     onPressed: () {
                       Navigator.of(context).pushNamed('/login');
                     },

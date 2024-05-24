@@ -1,25 +1,73 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfirebase/views/components/app_text.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:flutterfirebase/views/components/container.dart';
 import 'package:flutterfirebase/views/components/image_container.dart';
 import 'package:flutterfirebase/views/components/password_textfield.dart';
 import 'package:flutterfirebase/views/components/username_textfield.dart';
 
-class SignupScreen extends StatefulWidget {
-  SignupScreen({super.key});
-
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-void signUpUser() {}
-
-class _SignupScreenState extends State<SignupScreen> {
-  final usernameController = TextEditingController();
+class _SignUpScreenState extends State<SignUpScreen> {
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  //signInUSER
+  void signUpUser() async {
+    //loading circle
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.black,
+            ),
+          );
+        });
+
+    //sign In
+    try {
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        Navigator.pop(context);
+      } else {
+        showErrorMessage("Password don't match");
+      }
+      //pop loading circle
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      //show error message
+      showErrorMessage(e.code);
+    }
+  }
+
+  void showErrorMessage(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              message,
+              style: AppText.bodyText,
+            ),
+            backgroundColor: Colors.grey,
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,99 +78,92 @@ class _SignupScreenState extends State<SignupScreen> {
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
-                const Spacer(),
-                const Icon(
-                  Icons.handshake,
-                  size: 60,
+                Spacer(),
+                ImageContainer(
+                  imagePath: "assets/png/splash.jpg",
+                  height: 200,
                 ),
-                const Text("Register", style: AppText.mainText),
-                const Spacer(),
+                Text("Register With Us", style: AppText.mainText),
+                Spacer(),
                 UsernameTextField(
-                  label: ("FullName"),
-                  controller: usernameController,
-                  hinttext: "Osunfisan Peter",
-                  obscuretext: false,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                UsernameTextField(
-                  label: ("Email adress"),
-                  controller: usernameController,
+                  label: ("Email address"),
+                  controller: emailController,
                   hinttext: "peter@gmail.com",
                   obscuretext: false,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 12,
                 ),
                 PasswordTextfield(
                   label: ("Password"),
                   controller: passwordController,
                 ),
-                const SizedBox(
+                SizedBox(height: 12),
+                PasswordTextfield(
+                  label: ("confirm Password"),
+                  controller: confirmPasswordController,
+                ),
+                SizedBox(
                   height: 24,
                 ),
-                const ContainerBox(
+                ContainerBox(
                   onTap: signUpUser,
-                  // onTap: () {
-                  // Navigator.of(context).pushNamed('/login');
-                  // },
                   hintText: 'Sign Up',
                 ),
-                const Spacer(),
+                Spacer(),
                 Row(
                   children: [
                     Expanded(
                         child: Divider(
-                      thickness: 0.8,
-                      color: Colors.grey.shade800,
+                      thickness: 0.5,
+                      color: Colors.grey.shade300,
                     )),
-                    const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text("Or Sign Up With", style: AppText.bodyText),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("Or continue with", style: AppText.bodyText),
                     ),
                     Expanded(
                         child: Divider(
-                      thickness: 0.8,
-                      color: Colors.grey.shade800,
+                      thickness: 0.5,
+                      color: Colors.grey.shade300,
                     )),
                   ],
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                        child: const ImageContainer(
-                            imagePath: "assets/png/google.png")),
-                    const SizedBox(
+                        child:
+                            ImageContainer(imagePath: "assets/png/google.png")),
+                    SizedBox(
                       width: 10,
                     ),
                     GestureDetector(
-                        child: const ImageContainer(
+                        child: ImageContainer(
                             imagePath: "assets/png/facebook.png")),
                   ],
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 30,
                 ),
                 Row(
                   children: [
-                    const Text("Already a Member?", style: AppText.bodyText),
-                    const SizedBox(
+                    Text("Already a Member?", style: AppText.bodyText),
+                    SizedBox(
                       width: 10,
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed('/login');
                       },
-                      child: const Text("Login", style: AppText.subText),
+                      child: Text("Login", style: AppText.subText),
                     ),
                   ],
                 ),
-                const Spacer(),
+                Spacer(),
               ],
             ),
           ),

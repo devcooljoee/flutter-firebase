@@ -43,49 +43,21 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == "user-not-found") {
-        wrongEmail();
-      }
-      if (e.code == "wrong-password") {
-        wrongPassword();
-      }
+      //show error message
+      showErrorMessage(e.code);
     }
   }
 
-  void wrongEmail() {
+  void showErrorMessage(String message) {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text(
-              "Wrong Email",
+              message,
+              style: AppText.bodyText,
             ),
-            content: Text("No user found for that email."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("OK"),
-              ),
-            ],
-          );
-        });
-  }
-
-  void wrongPassword() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              "Wrong Password",
-            ),
-            content: Text("Incorrect password provided."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("OK"),
-              ),
-            ],
+            backgroundColor: Colors.grey,
           );
         });
   }
@@ -101,9 +73,9 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 Spacer(),
-                Icon(
-                  Icons.lock,
-                  size: 60,
+                ImageContainer(
+                  imagePath: "assets/png/splash.jpg",
+                  height: 200,
                 ),
                 Text("Welcome", style: AppText.mainText),
                 Spacer(),
