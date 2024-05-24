@@ -36,15 +36,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     //sign In
     try {
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-        Navigator.pop(context);
-      } else {
-        showErrorMessage("Password don't match");
-      }
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
       //pop loading circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
