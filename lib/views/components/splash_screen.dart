@@ -24,23 +24,18 @@ class _SplashScreenStateState extends State<SplashScreenState> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ImageContainer(
               imagePath: "assets/png/splash.jpg",
-              height: 200,
+              height: 100,
             ),
             SizedBox(height: 24),
-            Text(
-              "ChatNow",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                  color: Colors.black),
-            ),
+            Text("ChatNow", style: TextStyle()),
           ],
         ),
       ),

@@ -34,38 +34,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
           );
         });
 
-    //sign In
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      //pop loading circle
+    if (passwordController.text != confirmPasswordController.text) {
       Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      //show error message
-      showErrorMessage(e.code);
+
+      showErrorMessage("Password don't match");
+    } else {
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        //pop loading circle
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        //show error message
+        showErrorMessage(e.code);
+      }
     }
+
+    //sign In
   }
 
   void showErrorMessage(String message) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              message,
-              style: AppText.bodyText,
-            ),
-            backgroundColor: Colors.grey,
-          );
-        });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+      message,
+      style: AppText.bodyText,
+    )));
+    // showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return AlertDialog(
+    //         title: Text(
+    //           message,
+    //           style: AppText.bodyText,
+    //         ),
+    //         backgroundColor: Colors.grey,
+    //       );
+    //     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -131,14 +144,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                        child:
-                            ImageContainer(imagePath: "assets/png/google.png")),
+                      child: ImageContainer(
+                          imagePath: "assets/png/google.png", height: 60),
+                    ),
                     SizedBox(
                       width: 10,
                     ),
                     GestureDetector(
-                        child: ImageContainer(
-                            imagePath: "assets/png/facebook.png")),
+                      child: ImageContainer(
+                          imagePath: "assets/png/facebook.png", height: 60),
+                    ),
                   ],
                 ),
                 SizedBox(

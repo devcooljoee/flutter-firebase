@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class UsernameTextField extends StatefulWidget {
-  final String label;
+  final String? label;
   final controller;
   final hinttext;
   final obscuretext;
@@ -11,7 +11,7 @@ class UsernameTextField extends StatefulWidget {
 
   const UsernameTextField({
     super.key,
-    required this.label,
+    this.label,
     required this.controller,
     this.hinttext,
     this.obscuretext,
